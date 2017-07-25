@@ -1,9 +1,9 @@
 #!/bin/bash
 
 ITEMS=(
-    CO2_WLULUCF_INGG=http://unfccc.int/ghg_data/ghg_data_unfccc/time_series_annex_i/items/3844.php
-    CH4_WLULUCF_INGG=http://unfccc.int/ghg_data/ghg_data_unfccc/time_series_annex_i/items/3846.php
-    N2O_WLULUCF_INGG=http://unfccc.int/ghg_data/ghg_data_unfccc/time_series_annex_i/items/3848.php
+    CO2_WLULUCF=http://unfccc.int/ghg_data/ghg_data_unfccc/time_series_annex_i/items/3844.php
+    CH4_WLULUCF=http://unfccc.int/ghg_data/ghg_data_unfccc/time_series_annex_i/items/3846.php
+    N2O_WLULUCF=http://unfccc.int/ghg_data/ghg_data_unfccc/time_series_annex_i/items/3848.php
 )
 
 for ITEM in "${ITEMS[@]}"; do
@@ -16,9 +16,9 @@ for ITEM in "${ITEMS[@]}"; do
                 -t -m "//x:div[@class='contpart']/x:table/x:tbody" \
                     -m "x:tr" \
                         -m "x:td[not(position()=10) and not(position()=2)]" \
-                           -c "normalize-space(.)" \
+                           -c "translate(normalize-space(.), ',', '')" \
                            -i 'not(position()=last())' -o ':' -b \
                     -b -n | \
-        sed '1,2s/^/# /' > "${FNAME}.csv" &
+        sed '1,2s/^/# /' > "${FNAME}.CSV" &
 done
 wait

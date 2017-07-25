@@ -1,0 +1,24 @@
+#!/bin/bash
+
+ITEMS=(
+    CO2_WLULUCF_INGG=http://unfccc.int/ghg_data/ghg_data_unfccc/time_series_annex_i/items/3844.php
+    CH4_WLULUCF_INGG=http://unfccc.int/ghg_data/ghg_data_unfccc/time_series_annex_i/items/3846.php
+    N2O_WLULUCF_INGG=http://unfccc.int/ghg_data/ghg_data_unfccc/time_series_annex_i/items/3848.php
+)
+
+for ITEM in "${ITEMS[@]}"; do
+    FNAME="${ITEM%%=*}"
+    URL="${ITEM#*=}"
+    wget -q -O- "${URL}" | \
+        tidy -asxhtml -indent -numeric -quiet 2> /dev/null | \
+        xmlstarlet \
+            sel -N x="http://www.w3.org/1999/xhtml" \
+                -t -m "//x:div[@class='contpart']/x:table/x:tbody" \
+                    -m "x:tr" \
+                        -m "x:td" \
+                           -c "normalize-space(.)" \
+                           -i 'not(position()=last())' -o ':' -b \
+                    -b -n | \
+        sed 1d > "${FNAME}.csv" &
+done
+wait

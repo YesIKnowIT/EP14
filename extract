@@ -15,10 +15,10 @@ for ITEM in "${ITEMS[@]}"; do
             sel -N x="http://www.w3.org/1999/xhtml" \
                 -t -m "//x:div[@class='contpart']/x:table/x:tbody" \
                     -m "x:tr" \
-                        -m "x:td" \
+                        -m "x:td[not(position()=10) and not(position()=2)]" \
                            -c "normalize-space(.)" \
                            -i 'not(position()=last())' -o ':' -b \
                     -b -n | \
-        sed 1d > "${FNAME}.csv" &
+        sed '1,2s/^/# /' > "${FNAME}.csv" &
 done
 wait

@@ -14,12 +14,5 @@ join <(
         ' ${G}_WLULUCF.CSV
     done | sort -t: -k1
 ) <(sort -t: -k2 ISO3166.CSV ) -t: -1 1 -2 2 -e XXX -o 2.1,1.2,1.3,1.4 \
-        | sort \
-        | tee >(grep "^..:1990" > GHG_EMISSIONS_1990.CSV) \
-              >(grep "^..:1995" > GHG_EMISSIONS_1995.CSV) \
-              >(grep "^..:2000" > GHG_EMISSIONS_2000.CSV) \
-              >(grep "^..:2005" > GHG_EMISSIONS_2005.CSV) \
-              >(grep "^..:2010" > GHG_EMISSIONS_2010.CSV) \
-              >(grep "^..:2011" > GHG_EMISSIONS_2011.CSV) \
-              >(grep "^..:2012" > GHG_EMISSIONS_2012.CSV) \
+    | sort \
     > GHG_EMISSIONS.CSV

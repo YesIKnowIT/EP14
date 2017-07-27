@@ -4,6 +4,7 @@ ITEMS=(
     CO2_WLULUCF=http://unfccc.int/ghg_data/ghg_data_unfccc/time_series_annex_i/items/3844.php
     CH4_WLULUCF=http://unfccc.int/ghg_data/ghg_data_unfccc/time_series_annex_i/items/3846.php
     N2O_WLULUCF=http://unfccc.int/ghg_data/ghg_data_unfccc/time_series_annex_i/items/3848.php
+    SF6_WLULUCF=http://unfccc.int/ghg_data/ghg_data_unfccc/time_series_annex_i/items/4131.php
 )
 
 for ITEM in "${ITEMS[@]}"; do

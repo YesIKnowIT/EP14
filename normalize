@@ -8,9 +8,17 @@ join <(
         NR==2 { for(i = 2; i <= NF; ++i) Y[i]=$i }
         NR>2 {
             for(i = 2; i <= NF; ++i) {
-                print $1, Y[i], GAS, $i;
+                print $1, Y[i], GAS, sprintf("%8s",$i);
             }
         }
         ' ${G}_WLULUCF.CSV
     done | sort -t: -k1
-) <(sort -t: -k2 iso3166.csv ) -t: -1 1 -2 2 -e XXX -o 2.1,1.2,1.3,1.4 > GHG_EMISSIONS.CSV
+) <(sort -t: -k2 ISO3166.CSV ) -t: -1 1 -2 2 -e XXX -o 2.1,1.2,1.3,1.4 \
+        | tee >(grep "^..:1990" > GHG_EMISSIONS_1990.CSV) \
+        | tee >(grep "^..:1995" > GHG_EMISSIONS_1995.CSV) \
+        | tee >(grep "^..:2000" > GHG_EMISSIONS_2000.CSV) \
+        | tee >(grep "^..:2005" > GHG_EMISSIONS_2005.CSV) \
+        | tee >(grep "^..:2010" > GHG_EMISSIONS_2010.CSV) \
+        | tee >(grep "^..:2011" > GHG_EMISSIONS_2011.CSV) \
+        | tee >(grep "^..:2012" > GHG_EMISSIONS_2012.CSV) \
+    > GHG_EMISSIONS.CSV

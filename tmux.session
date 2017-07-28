@@ -1,0 +1,10 @@
+#!/bin/bash
+
+tmux $(sed 's/$/;/' << EOF
+    new session
+    new-window
+    set status off
+    split-window -h
+    split-window -fv -l 6
+EOF
+)

@@ -1,0 +1,68 @@
+# 1
+shuf -n10 GHG_EMISSIONS.CSV 
+
+# 2
+grep -F :1990:SF6 GHG_EMISSIONS.CSV | head
+
+# 3
+man paste
+
+# 4
+grep -F :1990:SF6 GHG_EMISSIONS.CSV > TEMP1
+grep -F :2000:SF6 GHG_EMISSIONS.CSV > TEMP2
+paste TEMP1 TEMP2 | head 
+rm TEMP*
+
+# 4b
+paste \
+    <(grep -F :1990:SF6 GHG_EMISSIONS.CSV) \
+    <(grep -F :2000:SF6 GHG_EMISSIONS.CSV ) \
+| head
+
+# 5
+join -t: -1 1 -2 1 \
+    <(grep -F :1990:SF6 GHG_EMISSIONS.CSV) \
+    <(grep -F :2000:SF6 GHG_EMISSIONS.CSV ) \
+| head
+
+# 6
+join -t: -1 1 -2 1 \
+    -o 0,2.3,1.4,2.4 \
+    <(grep -F :1990:SF6 GHG_EMISSIONS.CSV) \
+    <(grep -F :2000:SF6 GHG_EMISSIONS.CSV ) \
+| head
+
+# 7
+join -t: -1 1 -2 1 \
+    -o 0,2.3,1.4,2.4 \
+    -a2 \
+    <(grep -F :1990:SF6 GHG_EMISSIONS.CSV) \
+    <(grep -F :2000:SF6 GHG_EMISSIONS.CSV ) \
+| head
+
+# 8
+join -t: -1 1 -2 1 \
+    -o 0,2.3,1.4,2.4 \
+    -a2 -e "       na" \
+    <(grep -F :1990:SF6 GHG_EMISSIONS.CSV) \
+    <(grep -F :2000:SF6 GHG_EMISSIONS.CSV ) \
+| head
+
+# 9
+join -t: -1 2 -2 1 ISO3166.CSV \
+    <(join -t: -1 1 -2 1 \
+        -o 0,2.3,1.4,2.4 \
+        -a2 -e "       na" \
+        <(grep -F :1990:SF6 GHG_EMISSIONS.CSV) \
+        <(grep -F :2000:SF6 GHG_EMISSIONS.CSV ) \
+    ) | head
+
+# 9
+join -t: -1 2 -2 1 <(sort -t: -k2,2 ISO3166.CSV) \
+    <(join -t: -1 1 -2 1 \
+        -o 0,2.3,1.4,2.4 \
+        -a2 -e "       na" \
+        <(grep -F :1990:SF6 GHG_EMISSIONS.CSV) \
+        <(grep -F :2000:SF6 GHG_EMISSIONS.CSV ) \
+    ) | head
+

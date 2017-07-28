@@ -1,10 +1,41 @@
 #!/bin/bash
 
-tmux $(sed 's/$/;/' << EOF
-    new session
-    new-window
-    set status off
-    split-window -h
-    split-window -fv -l 6
-EOF
-)
+function tmux-edit-file() {
+    tmux send-keys -t "$1" clear Enter
+    tmux send-keys -t "$1" C-x C-e ':set noai' Enter i
+    while read -r; do
+        tmux send-keys -t "$1" -l "${REPLY}" \; send-keys -t "$1" Enter
+    done
+}
+
+function tmux-send-file() {
+    tmux send-keys -t "$1" clear Enter
+    while read -r; do
+        tmux send-keys -t "$1" -l "${REPLY}" \; send-keys -t "$1" Enter
+    done
+}
+
+tmux new-session -s EP14 -d
+tmux rename-window -t EP14 'shuf'
+
+tmux new-window -t EP14 -n 'grep'
+tmux split-window -t EP14 -h
+tmux split-window -t EP14 -fv -l 6
+
+tmux new-window -t EP14 -n 'join'
+
+tmux new-window -t EP14 -n 'challenge'
+tmux split-window -t EP14 -v
+tmux resize-pane -t EP14:challenge.0 -y 6
+
+tmux-send-file EP14:shuf.0 < COMMAND1 &
+tmux-send-file EP14:grep.0 < COMMAND2 &
+tmux-send-file EP14:grep.1 < COMMAND3 &
+
+tmux-edit-file EP14:join.0 < COMMAND4 &
+
+tmux-send-file EP14:challenge.0 < COMMAND8 &
+tmux-send-file EP14:challenge.1 < COMMAND9 &
+
+wait
+tmux attach-session -t EP14

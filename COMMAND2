@@ -1,0 +1,1 @@
+grep -F :1990:SF6 GHG_EMISSIONS.CSV | head

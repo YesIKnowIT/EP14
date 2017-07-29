@@ -1,7 +1,7 @@
 #!/bin/bash
 
 function tmux-edit-file() {
-    tmux send-keys -t "$1" clear Enter
+    tmux send-keys -t "$1" 'sleep 1 && clear' Enter
     tmux send-keys -t "$1" C-x C-e ':set noai' Enter i
     while read -r; do
         tmux send-keys -t "$1" -l "${REPLY}" \; send-keys -t "$1" Enter
@@ -9,39 +9,47 @@ function tmux-edit-file() {
 }
 
 function tmux-send-file() {
-    tmux send-keys -t "$1" clear
+    tmux send-keys -t "$1" 'sleep 1 && clear'
     while read -r; do
         tmux send-keys -t "$1" Enter
         tmux send-keys -t "$1" -l "${REPLY}"
     done
 }
 
+
 tmux new-session -s EP14 -d
-tmux rename-window -t EP14 'shuf'
+tmux set-option -t EP14 default-terminal tmux
+tmux set-option -t EP14 default-command "/bin/bash"
+
+tmux new-window -t EP14 -n 'shuf'
 
 tmux new-window -t EP14 -n 'grep'
-tmux split-window -t EP14 -h
-tmux split-window -t EP14 -fv -l 6
+tmux split-window -t EP14 -v -l 8
 tmux select-pane -t EP14:grep.0
 
 tmux new-window -t EP14 -n 'join'
 
 tmux new-window -t EP14 -n 'challenge'
-tmux split-window -t EP14 -v
-tmux resize-pane -t EP14:challenge.0 -y 6
 
 tmux set-option -t EP14 status-style "fg=white,bg=black"
-tmux set-option -t EP14 status-right ""
+tmux set-option -t EP14 status-right "https://yesik.it/EP14"
+tmux set-window-option -gt EP14 pane-border-style "fg=colour250"
+tmux set-window-option -gt EP14 pane-active-border-style "fg=colour250"
 tmux set-window-option -gt EP14 window-status-format "#I:#W "
 
 tmux-send-file EP14:shuf.0 < COMMAND1 &
 tmux-send-file EP14:grep.0 < COMMAND2 &
-tmux-send-file EP14:grep.1 < COMMAND3 &
 
-tmux-edit-file EP14:join.0 < COMMAND4 &
+tmux-send-file EP14:grep.1 < <(cat << EOF
+	export EDITOR="source tools/histeditor"
+	clear
+
+EOF
+)&
 
 tmux-send-file EP14:challenge.0 < COMMAND8 &
-#tmux-send-file EP14:challenge.1 < COMMAND9 &
 
 wait
+tmux kill-window -t EP14:0 # This one has the wrong TERM
+tmux select-window -t EP14:1
 tmux attach-session -t EP14

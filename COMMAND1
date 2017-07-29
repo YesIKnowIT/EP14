@@ -1,1 +1,2 @@
+ls -1 *.CSV
 shuf -n10 GHG_EMISSIONS.CSV

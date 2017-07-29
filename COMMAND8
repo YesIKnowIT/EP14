@@ -1,1 +1,1 @@
-ls -1 *.CSV
+head *.CSV | column -c100

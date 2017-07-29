@@ -9,9 +9,10 @@ function tmux-edit-file() {
 }
 
 function tmux-send-file() {
-    tmux send-keys -t "$1" clear Enter
+    tmux send-keys -t "$1" clear
     while read -r; do
-        tmux send-keys -t "$1" -l "${REPLY}" \; send-keys -t "$1" Enter
+        tmux send-keys -t "$1" Enter
+        tmux send-keys -t "$1" -l "${REPLY}"
     done
 }
 
@@ -21,6 +22,7 @@ tmux rename-window -t EP14 'shuf'
 tmux new-window -t EP14 -n 'grep'
 tmux split-window -t EP14 -h
 tmux split-window -t EP14 -fv -l 6
+tmux select-pane -t EP14:grep.0
 
 tmux new-window -t EP14 -n 'join'
 
@@ -28,8 +30,9 @@ tmux new-window -t EP14 -n 'challenge'
 tmux split-window -t EP14 -v
 tmux resize-pane -t EP14:challenge.0 -y 6
 
-tmux set-option status-style "fg=white,bg=black"
-tmux set-option status-right ""
+tmux set-option -t EP14 status-style "fg=white,bg=black"
+tmux set-option -t EP14 status-right ""
+tmux set-window-option -gt EP14 window-status-format "#I:#W "
 
 tmux-send-file EP14:shuf.0 < COMMAND1 &
 tmux-send-file EP14:grep.0 < COMMAND2 &

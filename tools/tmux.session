@@ -33,6 +33,8 @@ tmux new-window -t EP14 -n 'challenge'
 
 tmux set-option -t EP14 status-style "fg=white,bg=black"
 tmux set-option -t EP14 status-right "https://yesik.it/EP14"
+tmux set-window-option -gt EP14 window-status-activity-style "fg=white,bg=black"
+tmux set-window-option -gt EP14 window-status-bell-style "fg=white,bg=black"
 tmux set-window-option -gt EP14 pane-border-style "fg=colour250"
 tmux set-window-option -gt EP14 pane-active-border-style "fg=colour250"
 tmux set-window-option -gt EP14 window-status-format "#I:#W "

@@ -28,6 +28,9 @@ tmux new-window -t EP14 -n 'challenge'
 tmux split-window -t EP14 -v
 tmux resize-pane -t EP14:challenge.0 -y 6
 
+tmux set-option status-style "fg=white,bg=black"
+tmux set-option status-right ""
+
 tmux-send-file EP14:shuf.0 < COMMAND1 &
 tmux-send-file EP14:grep.0 < COMMAND2 &
 tmux-send-file EP14:grep.1 < COMMAND3 &
@@ -35,7 +38,7 @@ tmux-send-file EP14:grep.1 < COMMAND3 &
 tmux-edit-file EP14:join.0 < COMMAND4 &
 
 tmux-send-file EP14:challenge.0 < COMMAND8 &
-tmux-send-file EP14:challenge.1 < COMMAND9 &
+#tmux-send-file EP14:challenge.1 < COMMAND9 &
 
 wait
 tmux attach-session -t EP14

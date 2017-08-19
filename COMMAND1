@@ -1,2 +1,2 @@
 ls -1 *.CSV
-shuf -n10 GHG_EMISSIONS.CSV
+shuf -n15 GHG_EMISSIONS.CSV

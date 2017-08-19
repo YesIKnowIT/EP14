@@ -27,8 +27,6 @@ tmux new-window -t EP14 -n 'grep'
 tmux split-window -t EP14 -v -l 8
 tmux select-pane -t EP14:grep.0
 
-tmux new-window -t EP14 -n 'join'
-
 tmux new-window -t EP14 -n 'challenge'
 
 tmux set-option -t EP14 status-style "fg=white,bg=black"

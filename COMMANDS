@@ -1,5 +1,5 @@
 # 1
-shuf -n10 GHG_EMISSIONS.CSV 
+shuf -n15 GHG_EMISSIONS.CSV 
 
 # 5
 join -t: -1 1 -2 1 \
